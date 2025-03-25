@@ -1,25 +1,27 @@
 # 마이웨이(가제)
 
-This project is a web application built using Node.js, Express, EJS, and MySQL. It allows users to create and manage their custom sandwich orders, add friends, and view friends' sandwich orders.
-
 ## 목차
 
-- [기술스택](#기술스택)
+- [개발 목적](#개발-목적)
 - [개발기간](#개발기간)
 - [기능](#기능)
 - [데이터베이스](#데이터베이스)
 - [고도화 방안](#고도화-방안)
+- [시연 영상](#시연-영상)
+
+## 개발 목적
+
+본 개발의 목적은 서브웨이 어플리케이션 사용 과정에서의 불편함을 해결하고 사용자 경험을 개선하기 위해 추가 기능을 구현하는 것이다. 현재 어플리케이션은 사용자 인터페이스 및 기능 면에서 일부 제약이 있어 주문 과정의 비효율성을 초래하고 있다. 이에 따라, 본 개발은 사용자 피드백을 반영하여 자주 주문하는 메뉴를 저장하고 재주문 시 간편하게 불러올 수 있도록 지원하는 것을 목표로 한다. 이를 통해 사용자 만족도를 향상시키고 전체적인 서비스 품질을 개선할 것으로 기대된다.
 
 ## 기술스택
 표로 정리하기
-- 언어 : JavaScript, SQL
+- 언어 : Javascript
 - 서버 : Express
 - 프레임워크 : EJS(템플릿 엔진)
 - DB : MySQL
 - IDE : Visual Studio Code
 - 패키지 : express, ejs, dotenv, express-session, mysql
 - 코드 보조 도구(Code assistant tool) : Copilot(Free version)
-
 
 ## 개발기간
 
@@ -33,12 +35,23 @@ This project is a web application built using Node.js, Express, EJS, and MySQL. 
 - 친구의 커스텀 샌드위치 확인
 
 ## 데이터베이스
-![ER 다이어그램](image.png)
+![ER 다이어그램](/image/ERD.png)
+
+## 시연 영상
+- 사용자 인증 및 승인
+![ER 다이어그램](/gif/login.gif)
+
+- 커스텀 샌드위치 저장
+![ER 다이어그램](/gif/addMenu.gif)
+
+- 친구 추가 및 친구의 커스텀 샌드위치 확인
+![ER 다이어그램](/gif/addFriend.gif)
 
 ## 고도화 방안
 
+- 친구의 커스텀 샌드위치로 주문
 - 사용자들이 많이 선택한 샌드위치 메뉴
 - 인기 토핑 및 소스
 - 자주 제외한 야채
 - 테마별 추천 메뉴
-    - 예) 다이어트 추천 메뉴
+    - 다이어트 추천 메뉴

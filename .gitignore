@@ -1,5 +1,3 @@
-Myway.http
-
 # Node.js
 node_modules/
 npm-debug.log
@@ -41,3 +39,6 @@ coverage/
 
 # Optional ava coverage
 .ava/
+
+
+Myway_SQL.sql

@@ -96,7 +96,8 @@ app.get('/mypage', (req, res) => {
                 res.status(500).send('Internal server error');
                 return;
             }
-
+            console.log('orders:', orders);
+            console.log('friends:', friends);
             res.render('mypage', { title: '마이페이지', user: req.session.user, orders, friends });
         });
     });
@@ -114,11 +115,11 @@ app.post('/menu', (req, res) => {
         return res.redirect('/');
     }
     console.log('req.body:', req.body);
-    const { sandwich_menu, bread_type, excludedVegetables = [], extra_toppings = [], sauces = [] } = req.body;
+    const { sandwich_menu, bread_type, vegetables = [], extra_toppings = [], sauces = [] } = req.body;
 
     const userId = req.session.user.id; // 세션에서 사용자 ID 가져오기
     const allVegetables = ['양상추', '토마토', '오이', '피망(파프리카)', '양파', '피클', '올리브', '할라피뇨', '아보카도'];
-    const includedVegetables = allVegetables.filter(veg => !excludedVegetables.includes(veg));
+    const includedVegetables = allVegetables.filter(veg => !vegetables.includes(veg));
     const query = 'INSERT INTO sandwich_orders (user_id, sandwich_menu, bread_type, included_vegetables, extra_toppings, sauces) VALUES (?, ?, ?, ?, ?, ?)';
     db.query(query, [
         userId, sandwich_menu, bread_type,
@@ -140,16 +141,17 @@ app.post('/add-friend', (req, res) => {
         return res.redirect('/');
     }
     console.log('req.body:', req.body);
-    const { friendUsername } = req.body;
-    const userName = req.session.user.username; // 세션에서 사용자 ID 가져오기
-
-    if (userName === friendUsername) {
-        return res.send({ success: false, message: 'You cannot add yourself as a friend' });
+    const { inputFriendUsername } = req.body;
+    const userName = req.session.user.username; // 세션에서 로그인한 사용자 ID 가져오기
+    console.log('userName:', userName);
+    console.log('inputFriendUsername:', inputFriendUsername);
+    if (userName === inputFriendUsername) {
+        return res.send({ success: false, message: '본인을 친구로 추가할 수 없습니다.' });
     }
 
-    // Check if the friend exists
+    // 친구가 존재하는지 확인
     const checkFriendQuery = 'SELECT * FROM users WHERE username = ?';
-    db.query(checkFriendQuery, [friendUsername], (err, results) => {
+    db.query(checkFriendQuery, [inputFriendUsername], (err, results) => {
         if (err) {
             console.error('Error querying the database:', err);
             res.status(500).send('Internal server error');
@@ -180,34 +182,23 @@ app.post('/add-friend', (req, res) => {
 });
 
 // 친구의 마이웨이 목록 가져오기
-app.get('/friend-orders/:friendUsername', (req, res) => {
+app.get('/friend-orders/:friendId', (req, res) => {
     if (!req.session.user) {
         return res.redirect('/');
     }
 
-    const friendUsername = req.params.friendUsername;
-    const friendUserIdQuery = 'SELECT * FROM users WHERE username = ?';
-    console.log("friendUsername ", friendUsername);
+    const friendId = req.params.friendId;
+    console.log("friendId !! ", friendId);
+    const friendOrdersQuery = 'SELECT * FROM sandwich_orders WHERE user_id = ?';
 
-    db.query(friendUserIdQuery, [friendUsername], (err, friendId) => {
+    db.query(friendOrdersQuery, [friendId], (err, friendOrders) => {
         if (err) {
             console.error('Error querying the database:', err);
             res.status(500).send('Internal server error');
             return;
         }
-        friendId = friendId[0].id;
-        console.log("friendId ", friendId);
-        const friendOrdersQuery = 'SELECT * FROM sandwich_orders WHERE user_id = ?';
-
-        db.query(friendOrdersQuery, [friendId], (err, friendOrders) => {
-            if (err) {
-                console.error('Error querying the database:', err);
-                res.status(500).send('Internal server error');
-                return;
-            }
-            console.log("frinedOrders", friendOrders);
-            res.send({ title: '마이페이지', user: req.session.user, friendOrders });
-        });
+        console.log("frinedOrders", friendOrders);
+        res.send({ title: '마이페이지', user: req.session.user, friendOrders });
     });
 });
 
