@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .section {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .section h2 {
+            text-align: center;
+        }
+        .friend-input {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .friend-input input {
+            width: 70%;
+            padding: 5px;
+        }
+        .friend-input button {
+            width: 25%;
+            padding: 5px;
+        }
+        .list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .list li {
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <h2>마이웨이 목록</h2>
+            <ul id="myWayList" class="list">
+                <% orders.forEach(order => { %>
+                    <li>
+                        <strong class="menu-id" style="cursor: pointer;">메뉴ID:</strong> <%= order.id %><br>
+                        <div class="details">
+                            <strong>샌드위치 메뉴:</strong> <%= order.sandwich_menu %><br>
+                            <strong>빵 종류:</strong> <%= order.bread_type %><br>
+                            <strong>야채:</strong> <%= order.included_vegetables %><br>
+                            <strong>추가 토핑:</strong> <%= order.extra_toppings %><br>
+                            <strong>소스:</strong> <%= order.sauces %>
+                        </div>
+                    </li>
+                <% }) %>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>친구 추가</h2>
+            <div class="friend-input">
+                <input type="text" id="inputFriendUsername" placeholder="친구 USERNAME 입력">
+                <button onclick="addFriend()">추가</button>
+            </div>
+        </div>
+        <div class="section">
+            <h2>친구 목록</h2>
+            <ul id="friendListDisplay" class="list">
+                <% friends.forEach(friend => { %>
+                    <li id="friendUsername"><%= friend.username %></li>
+                <% }) %>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>친구의 마이웨이 목록</h2>
+            <ul id="friendMyWayList" class="list">
+
+            </ul>
+        </div>
+    </div>
+    <div class="section">
+        <h2>메뉴 고르기</h2>
+        <form action="/menu" method="GET">
+            <button type="submit">메뉴 고르기</button>
+        </form>
+    </div>
+    <script>
+        document.querySelectorAll('.menu-id').forEach(menuId => {
+            menuId.addEventListener('click', function() {
+                const details = this.nextElementSibling;
+                if (details.style.display === 'none' || details.style.display === '') {
+                    details.style.display = 'block';
+                } else {
+                    details.style.display = 'none';
+                }
+            });
+        });
+
+        // 찬구의 마이웨이 목록 가져오기
+        document.querySelectorAll('#friendUsername').forEach(friend => {
+            friend.addEventListener('click', function() {
+            const friendUsername = this.textContent;
+            fetch(`/friend-orders/${friendUsername}`)
+                .then(response => response.json())
+                .then(data => {
+                const friendMyWayList = document.getElementById('friendMyWayList');
+                friendMyWayList.innerHTML = '';
+                data.friendOrders.forEach(order => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                    <strong class="menu-id" style="cursor: pointer;">메뉴ID:</strong> ${order.id}<br>
+                    <div class="details">
+                        <strong>샌드위치 메뉴:</strong> ${order.sandwich_menu}<br>
+                        <strong>빵 종류:</strong> ${order.bread_type}<br>
+                        <strong>야채:</strong> ${order.included_vegetables}<br>
+                        <strong>추가 토핑:</strong> ${order.extra_toppings}<br>
+                        <strong>소스:</strong> ${order.sauces}
+                    </div>
+                    `;
+                    friendMyWayList.appendChild(li);
+                });
+                })
+                .catch(error => {
+                console.error('Error:', error);
+                });
+            });
+        });
+
+        function addFriend() {
+            const inputFriendUsername = document.getElementById('inputFriendUsername').value;
+            if (inputFriendUsername) {
+                fetch('/add-friend', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ inputFriendUsername }) // 예시로 사용자 ID를 1로 설정, 실제로는 로그인된 사용자의 ID를 사용해야 함
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload(); // 페이지 새로고침
+                        // const friendListDisplay = document.getElementById('friendListDisplay');
+                        // const li = document.createElement('li');
+                        // li.textContent = friendUsername;
+                        // friendListDisplay.appendChild(li.cloneNode(true));
+                        // document.getElementById('friendList').value = '';
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        }
+        
+        document.querySelectorAll('.friend-link').forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const friendId = this.getAttribute('data-friend-id');
+                    fetch(`/friend-orders/${friendId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const friendMyWayList = document.getElementById('friendMyWayList');
+                            friendMyWayList.innerHTML = '';
+                            data.friendOrders.forEach(order => {
+                                const li = document.createElement('li');
+                                li.innerHTML = `
+                                    <strong class="menu-id" style="cursor: pointer;">메뉴ID:</strong> ${order.id}<br>
+                                    <div class="details">
+                                        <strong>샌드위치 메뉴:</strong> ${order.sandwich_menu}<br>
+                                        <strong>빵 종류:</strong> ${order.bread_type}<br>
+                                        <strong>야채:</strong> ${order.included_vegetables}<br>
+                                        <strong>추가 토핑:</strong> ${order.extra_toppings}<br>
+                                        <strong>소스:</strong> ${order.sauces}
+                                    </div>
+                                `;
+                                friendMyWayList.appendChild(li);
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <h1>메뉴를 선택하세요</h1>
+        <nav>
+            <ul>
+                <li><a href="/mypage">Home</a></li>
+                <!-- Add more navigation links here -->
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <form id="sandwich-form" action="/menu" method="POST">
+            <h2>샌드위치 메뉴 선택</h2>
+            <select name="sandwich_menu" required>
+                <option value="베지">베지</option>
+                <option value="에그 슬라이스">에그 슬라이스</option>
+                <option value="햄">햄</option>
+                <option value="참치">참치</option>
+                <option value="머쉬룸">머쉬룸</option>
+                <option value="터키">터키</option>
+                <option value="비엘티">비엘티</option>
+                <option value="스파이시 이탈리안">스파이시 이탈리안</option>
+                <option value="치킨 데리야끼">치킨 데리야끼</option>
+                <option value="써브웨이 클럽">써브웨이 클럽</option>
+                <option value="풀드포크 바비큐">풀드포크 바비큐</option>
+                <option value="로스트 치킨">로스트 치킨</option>
+                <option value="쉬림프">쉬림프</option>
+                <option value="스파이시 쉬림프">스파이시 쉬림프</option>
+                <option value="터키 베이컨 아보카도">터키 베이컨 아보카도</option>
+                <option value="안창 비프">안창 비프</option>
+            </select>
+
+            <h2>빵 종류 선택</h2>
+            <select name="bread_type" required>
+                <option value="화이트">화이트</option>
+                <option value="하티">하티</option>
+                <option value="파마산 오레가노">파마산 오레가노</option>
+                <option value="위트">위트</option>
+                <option value="허니오트">허니오트</option>
+                <option value="플랫브레드">플랫브레드</option>
+            </select>
+
+            <h2>제외할 야채 선택</h2>
+            <div>
+                <label><input type="checkbox" name="vegetables" value="양상추"> 양상추</label>
+                <label><input type="checkbox" name="vegetables" value="토마토"> 토마토</label>
+                <label><input type="checkbox" name="vegetables" value="오이"> 오이</label>
+                <label><input type="checkbox" name="vegetables" value="피망"> 피망(파프리카)</label>
+                <label><input type="checkbox" name="vegetables" value="양파"> 양파</label>
+                <label><input type="checkbox" name="vegetables" value="피클"> 피클</label>
+                <label><input type="checkbox" name="vegetables" value="올리브"> 올리브</label>
+                <label><input type="checkbox" name="vegetables" value="할라피뇨"> 할라피뇨</label>
+                <label><input type="checkbox" name="vegetables" value="아보카도"> 아보카도</label>
+            </div>
+
+            <h2>추가 토핑 선택</h2>
+            <div>
+                <label><input type="checkbox" name="extra_toppings" value="미트 추가"> 미트 추가</label>
+                <label><input type="checkbox" name="extra_toppings" value="에그마요"> 에그마요</label>
+                <label><input type="checkbox" name="extra_toppings" value="베이컨"> 베이컨</label>
+                <label><input type="checkbox" name="extra_toppings" value="치즈 추가"> 치즈 추가</label>
+                <label><input type="checkbox" name="extra_toppings" value="에그 슬라이스"> 에그 슬라이스</label>
+                <label><input type="checkbox" name="extra_toppings" value="아보카도"> 아보카도</label>
+                <label><input type="checkbox" name="extra_toppings" value="오믈렛"> 오믈렛</label>
+                <label><input type="checkbox" name="extra_toppings" value="페퍼로니"> 페퍼로니</label>
+            </div>
+
+            <h2>소스 선택</h2>
+            <div>
+                <label><input type="checkbox" name="sauces" value="랜치"> 랜치</label>
+                <label><input type="checkbox" name="sauces" value="스위트 어니언"> 스위트 어니언</label>
+                <label><input type="checkbox" name="sauces" value="마요네즈"> 마요네즈</label>
+                <label><input type="checkbox" name="sauces" value="스위트 칠리"> 스위트 칠리</label>
+                <label><input type="checkbox" name="sauces" value="스모크 바비큐"> 스모크 바비큐</label>
+                <label><input type="checkbox" name="sauces" value="핫 칠리"> 핫 칠리</label>
+                <label><input type="checkbox" name="sauces" value="허니 머스터드"> 허니 머스터드</label>
+                <label><input type="checkbox" name="sauces" value="사우스웨스트 치폴레"> 사우스웨스트 치폴레</label>
+                <label><input type="checkbox" name="sauces" value="홀스래디쉬"> 홀스래디쉬</label>
+                <label><input type="checkbox" name="sauces" value="머스타드"> 머스타드</label>
+                <label><input type="checkbox" name="sauces" value="올리브 오일"> 올리브 오일</label>
+                <label><input type="checkbox" name="sauces" value="레드 와인 식초"> 레드 와인 식초</label>
+                <label><input type="checkbox" name="sauces" value="소금"> 소금</label>
+                <label><input type="checkbox" name="sauces" value="후추"> 후추</label>
+            </div>
+
+            <button type="submit" id="complete-button" class="complete-button">완료</button>
+        </form>
+    </main>
+    
+    <footer>
+        <!-- <p>&copy; 2023 My Node.js EJS MySQL App</p> -->
+    </footer>
+</body>
+</html>
